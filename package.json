@@ -5,6 +5,8 @@
   "packageManager": "pnpm@7.9.0",
   "license": "MIT",
   "scripts": {
+    "wasm": "wasm-pack build ./rust --target web",
+    "wasm:watch": "nodemon -w ./rust/src -e rs -x npm run wasm",
     "dev": "vite",
     "build": "vue-tsc --noEmit --skipLibCheck && vite build",
     "lint": "eslint src",
@@ -44,6 +46,7 @@
     "lint-staged": "^12.3.2",
     "markdown-it-link-attributes": "^4.0.0",
     "markdown-it-prism": "^2.2.2",
+    "nodemon": "^2.0.22",
     "pnpm": "^7.9.0",
     "prettier": "^2.5.1",
     "sass": "^1.49.0",
@@ -54,6 +57,7 @@
     "vite": "^3.0.5",
     "vite-plugin-fonts": "^0.6.0",
     "vite-plugin-vue-markdown": "^0.21.1",
+    "vite-plugin-wasm-pack": "^0.1.12",
     "vite-plugin-windicss": "^1.8.7",
     "vite-svg-loader": "^3.4.0",
     "vue-tsc": "^0.38.4"

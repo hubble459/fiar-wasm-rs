@@ -2,24 +2,24 @@
 import { RouteRecordRaw } from 'vue-router';
 
 const asyncRoutes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    name: 'home',
-    meta: {
-      title: '',
-      icon: '',
+    {
+        path: '/',
+        name: 'home',
+        meta: {
+            title: '',
+            icon: '',
+        },
+        component: () => import('@/views/home/index.vue'),
     },
-    component: () => import('@/views/home/index.vue'),
-  },
-  {
-    path: '/process',
-    name: 'process',
-    meta: {
-      title: 'Template configuration process',
-      icon: '',
+    {
+        path: '/process',
+        name: 'process',
+        meta: {
+            title: 'Template configuration process',
+            icon: '',
+        },
+        component: () => import('@/views/example/MarkdownPage.vue'),
     },
-    component: () => import('@/views/example/MarkdownPage.vue'),
-  },
 ];
 
 export default asyncRoutes;

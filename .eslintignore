@@ -1,7 +1,9 @@
-node_modules
+node_modules/
 .DS_Store
-dist
-dist-ssr
+dist/
+dist-ssr/
 *.local
-presets
+presets/
 *.d.ts
+rust/target/
+rust/pkg/

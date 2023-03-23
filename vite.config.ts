@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite';
 import { resolve } from 'path';
+import wasmPack from 'vite-plugin-wasm-pack';
 import presets from './presets/presets';
 
 // https://vitejs.dev/config/
@@ -10,7 +11,10 @@ export default defineConfig((env) => {
   return {
     base: viteEnv.VITE_BASE,
     // 插件
-    plugins: [presets(env)],
+    plugins: [
+      presets(env),
+      wasmPack(['./rust']),
+    ],
     // 别名设置
     resolve: {
       alias: {
@@ -21,7 +25,7 @@ export default defineConfig((env) => {
     server: {
       host: true, // host设置为true才可以使用network的形式，以ip访问项目
       port: 8080, // 端口号
-      open: true, // 自动打开浏览器
+      open: false, // 自动打开浏览器
       cors: true, // 跨域设置允许
       strictPort: true, // 如果端口已占用直接退出
       // 接口代理
@@ -53,9 +57,7 @@ export default defineConfig((env) => {
       preprocessorOptions: {
         // 全局引入了 scss 的文件
         scss: {
-          additionalData: `
-          @import "@/assets/styles/variables.scss";
-        `,
+          additionalData: '@import "@/assets/styles/variables.scss";',
           javascriptEnabled: true,
         },
       },
