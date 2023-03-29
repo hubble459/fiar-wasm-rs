@@ -27,3 +27,8 @@
         });
     };
 </script>
+
+<route lang="yaml">
+    exception:
+        401
+</route>

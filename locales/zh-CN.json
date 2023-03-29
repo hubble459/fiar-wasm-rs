@@ -9,5 +9,12 @@
   "change dark": "点击切换为暗黑主题",
   "change lang": "切换国际化语言",
   "method to using": "使用模板的方法",
-  "template process": "模板配置流程"
+  "template process": "模板配置流程",
+  "exception": {
+    "not_found": "页面未找到",
+    "not_found_sub": "请检查路径后重试或返回首页"
+  },
+  "global": {
+    "back": "后退"
+  }
 }

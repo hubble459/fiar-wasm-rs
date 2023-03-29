@@ -3,15 +3,15 @@
         <el-col>
             <el-result
                 icon="warning"
-                title="页面未找到"
-                sub-title="请检查路径后重试或返回首页"
+                :title="t('exception.not_found')"
+                :sub-title="t('exception.not_found_sub')"
             >
                 <template #extra>
                     <el-button
                         type="primary"
                         @click="goBack"
                     >
-                        Back
+                        {{ t('global.back') }}
                     </el-button>
                 </template>
             </el-result>
@@ -20,10 +20,12 @@
 </template>
 
 <script setup lang="ts">
+    const { t } = useI18n();
+
     const router = useRouter();
-    const goBack = () => {
+    function goBack() {
         router.push({
             name: 'home',
         });
-    };
+    }
 </script>

@@ -1,9 +1,11 @@
 // i18n
 import { createI18n } from 'vue-i18n';
-import messages from '@intlify/vite-plugin-vue-i18n/messages';
-// vue router
-import router from '@/router/index';
+import { createRouter, createWebHistory } from 'vue-router';
+import generatedRoutes from 'virtual:generated-pages';
+import { setupLayouts } from 'virtual:generated-layouts';
+import messages from '@intlify/unplugin-vue-i18n/messages';
 // pinia
+import axios, { AxiosError } from 'axios';
 import store from '@/store';
 import App from './App.vue';
 
@@ -19,8 +21,29 @@ const i18n = createI18n({
 
 const app = createApp(App);
 
-app.use(router).use(store);
+// Setup up pages with layouts
+const routes = setupLayouts(generatedRoutes);
+const router = createRouter({ history: createWebHistory(), routes });
+app
+    .use(router)
+    .use(store)
+    .use(i18n);
 
-app.use(i18n);
+axios.interceptors.response.use((a) => a, (err) => {
+    if (err instanceof AxiosError) {
+        const exceptionCatcher = routes.find((route) => route.meta?.exception === err.status);
+        if (exceptionCatcher) {
+            router.push(exceptionCatcher.path);
+        }
+    }
+    return err;
+});
+
+app.config.errorHandler = (err) => {
+    if (import.meta.env.DEV) {
+        console.error(err);
+    }
+    return false;
+};
 
 app.mount('#app');
