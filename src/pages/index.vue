@@ -1,57 +1,34 @@
 <template>
-    <div class="container max-w-3xl mx-auto mt-40">
-        <div class="h-60 mb-8">
-            <div class="w-52 h-52 mx-auto mb-4">
-                <vitecamp class="w-52 h-52" />
-            </div>
-        </div>
-        <div class="text-center text-md">
-            <h1 class="font-serif font-bold text-4xl mb-8">
-                {{ t('hello') }} , {{ t('welcome to') }} Vitecamp
-            </h1>
-            <p class="mb-10">
-                <strong>Vitecamp</strong>
-                {{ t('includes features') }}
-            </p>
-            <p class="mb-10">
-                <template
-                    v-for="(item, index) in featureList"
-                    :key="index"
-                >
-                    <a
-                        :href="item.href"
-                        target="_blank"
-                    >{{ item.name }}</a>
-                    <template v-if="!item.isEnd">
-                        |
-                    </template>
-                </template>
-            </p>
-            <div>
-                {{ t('before coding') }}, {{ t('setup ide') }}
-                <strong>VSCode</strong> + <strong>Volar</strong>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid grid-cols-7 align-middle place-items-center">
-        <div
-            v-for="(cell, index) in cells"
+    <h1>100 fps (raytracing on)</h1>
+    <div
+        :key="frame.toString()"
+        class="grid grid-cols-7 align-middle place-items-center gap-2"
+    >
+        <button
+            v-for="(cell, index) of cells"
             :key="index"
+            class="w-20 h-20 bg-gray-600 rounded"
+            :class="{
+                '!bg-blue-500': cell === Cell.PlayerOne,
+                '!bg-red-500': cell === Cell.PlayerTwo,
+            }"
+            @click="move(index, Cell.PlayerOne)"
+            @contextmenu.prevent.stop="move(index, Cell.PlayerTwo)"
         >
             {{ cell === Cell.Empty ? 'X' : cell === Cell.PlayerOne ? '1' : '2' }} ({{ index }})
-        </div>
+        </button>
     </div>
 </template>
 
 <script setup lang="ts">
     import init, { FourInARow, Cell } from 'rust';
-    import vitecamp from '@/assets/svg/vitecamp.svg?component';
 
     const cells = ref(new Uint8Array());
+    let fiar!: FourInARow;
+    const frame = ref(0);
 
     init().then(({ memory }) => {
-        const fiar = FourInARow.new();
+        fiar = FourInARow.new();
         const cellsPtr = fiar.cells();
         cells.value = new Uint8Array(memory.buffer, cellsPtr, fiar.width * fiar.height);
 
@@ -65,6 +42,16 @@
         // for (let index = 0; index < cells.value.length; index++) {
         // }
     });
+
+    function move(index: number, player: Cell) {
+        console.log({ index, frame: frame.value });
+        console.log(index % 7);
+
+        fiar.set_index(index, player);
+        frame.value += 1;
+
+        console.log(fiar.is_game_over());
+    }
 
     const { t } = useI18n();
     ElMessage.success({ message: 'welcome', duration: 1000 });
